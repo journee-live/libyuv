@@ -3,7 +3,7 @@
 # Run with -DTEST=ON to build unit tests
 
 PROJECT ( YUV C CXX )	# "C" is required even for C++ projects
-CMAKE_MINIMUM_REQUIRED( VERSION 2.8 )
+CMAKE_MINIMUM_REQUIRED( VERSION 2.8.12 )
 OPTION( TEST "Built unit tests" OFF )
 
 SET ( ly_base_dir	${PROJECT_SOURCE_DIR} )
@@ -26,9 +26,9 @@ INCLUDE_DIRECTORIES( BEFORE ${ly_inc_dir} )
 ADD_LIBRARY				( ${ly_lib_static} STATIC ${ly_source_files} )
 
 # this creates the shared library (.so)
-ADD_LIBRARY				( ${ly_lib_shared} SHARED ${ly_source_files} )
-SET_TARGET_PROPERTIES	( ${ly_lib_shared} PROPERTIES OUTPUT_NAME "${ly_lib_name}" )
-SET_TARGET_PROPERTIES	( ${ly_lib_shared} PROPERTIES PREFIX "lib" )
+#ADD_LIBRARY				( ${ly_lib_shared} SHARED ${ly_source_files} )
+#SET_TARGET_PROPERTIES	( ${ly_lib_shared} PROPERTIES OUTPUT_NAME "${ly_lib_name}" )
+#SET_TARGET_PROPERTIES	( ${ly_lib_shared} PROPERTIES PREFIX "lib" )
 
 # this creates the conversion tool
 ADD_EXECUTABLE			( yuvconvert ${ly_base_dir}/util/yuvconvert.cc )
@@ -41,6 +41,8 @@ if (JPEG_FOUND)
   target_link_libraries( yuvconvert ${JPEG_LIBRARY} )
   add_definitions( -DHAVE_JPEG )
 endif()
+
+cmake_policy(SET CMP0064 NEW)
 
 if(TEST)
   find_library(GTEST_LIBRARY gtest)
@@ -77,9 +79,10 @@ endif()
 # install the conversion tool, .so, .a, and all the header files
 INSTALL ( PROGRAMS ${CMAKE_BINARY_DIR}/yuvconvert			DESTINATION bin )
 INSTALL ( TARGETS ${ly_lib_static}						DESTINATION lib )
-INSTALL ( TARGETS ${ly_lib_shared} LIBRARY				DESTINATION lib RUNTIME DESTINATION bin )
+#INSTALL ( TARGETS ${ly_lib_shared} LIBRARY				DESTINATION lib RUNTIME DESTINATION bin )
 INSTALL ( DIRECTORY ${PROJECT_SOURCE_DIR}/include/		DESTINATION include )
 
 # create the .deb and .rpm packages using cpack
 INCLUDE ( CM_linux_packages.cmake )
 
+add_compile_definitions(_CRT_SECURE_NO_WARNINGS)

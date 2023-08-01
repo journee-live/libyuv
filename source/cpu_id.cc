@@ -47,7 +47,7 @@ LIBYUV_API int cpu_info_ = 0;
     !defined(__pnacl__) && !defined(__CLR_VER)
 LIBYUV_API
 void CpuId(int info_eax, int info_ecx, int* cpu_info) {
-#if defined(_MSC_VER)
+#if defined(_MSC_VER) && !__clang__
 // Visual C version uses intrinsic or inline x86 assembly.
 #if defined(_MSC_FULL_VER) && (_MSC_FULL_VER >= 160040219)
   __cpuidex(cpu_info, info_eax, info_ecx);

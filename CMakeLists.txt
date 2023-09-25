@@ -85,4 +85,3 @@ INSTALL ( DIRECTORY ${PROJECT_SOURCE_DIR}/include/		DESTINATION include )
 # create the .deb and .rpm packages using cpack
 INCLUDE ( CM_linux_packages.cmake )
 
-add_compile_definitions(_CRT_SECURE_NO_WARNINGS)

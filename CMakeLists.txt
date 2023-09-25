@@ -85,3 +85,4 @@ INSTALL ( DIRECTORY ${PROJECT_SOURCE_DIR}/include/		DESTINATION include )
 # create the .deb and .rpm packages using cpack
 INCLUDE ( CM_linux_packages.cmake )
 
+target_precompile_headers(${ly_lib_static} PRIVATE "<malloc.h>")

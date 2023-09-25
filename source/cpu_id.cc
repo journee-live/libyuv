@@ -133,11 +133,20 @@ int GetXCR0() {
 #pragma optimize("g", on)
 #endif
 
+FILE *libyuv_fopen(const char *file_path, const char *mode) {
+#ifdef _WIN32
+  int deny_write = 0x20;
+  return _fsopen(file_path, mode, deny_write);
+#else
+  return fopen(file_path, mode);
+#endif
+}
+
 // Based on libvpx arm_cpudetect.c
 // For Arm, but public to allow testing on any CPU
 LIBYUV_API SAFEBUFFERS int ArmCpuCaps(const char* cpuinfo_name) {
   char cpuinfo_line[512];
-  FILE* f = fopen(cpuinfo_name, "r");
+  FILE* f = libyuv_fopen(cpuinfo_name, "r");
   if (!f) {
     // Assume Neon if /proc/cpuinfo is unavailable.
     // This will occur for Chrome sandbox for Pepper or Render process.
